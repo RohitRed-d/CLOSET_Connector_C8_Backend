@@ -23,4 +23,8 @@ public class PLMService {
 
     @Autowired
     private PLMHelper plmHelper;
+
+	public JSONObject plmLogin(String body, String plmUrl, Map<String, String> headers)throws PLMException {
+		 return plmHelper.prepareLoginResponse(body, plmUrl, headers);
+	}
 }

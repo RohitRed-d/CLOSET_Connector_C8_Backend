@@ -51,7 +51,7 @@ public class PLMConstants {
     /****** CLOSET Rest constants end ******/
     //public static final String PLM_BASE_URL = "https://qaazure.bamboorose.com/qa2021r1";
     //public static final String PLM_BASE_URL = "https://azure-ts.bamboorose.com/qa2022r1";
-    public static final String LOGIN_URI = "/rest/user/doAuthentication";
+    public static final String LOGIN_URI = "/csi-requesthandler/api/v2/session";
     public static final String SEARCH_STYLE_URI = "/rest/techspec/searchStyles";
     public static final String GET_STYLE_URI = "/rest/techspec/searchStyleWithKeys";
     public static final String DOWNLOAD_ATTACHMENT_URI = "/imagestore/";

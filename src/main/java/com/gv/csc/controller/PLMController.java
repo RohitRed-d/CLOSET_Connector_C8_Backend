@@ -30,6 +30,39 @@ public class PLMController {
 
     @Autowired
     private PLMHelper plmHelper;
+    
 
     Logger logger = LoggerFactory.getLogger(PLMController.class);
+
+    /**
+     * login - End point to be used to connect to PLM
+     *
+     * @param userid   String userid
+     * @param password String password
+     * @return ResponseEntity holding the details on login
+     * @throws UnknownHostException
+     */
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@RequestBody String body, @RequestParam String plmUrl,@RequestHeader Map<String, String> headers, HttpSession session ){
+        logger.info("INFO::PLMController: login() started.");
+        System.out.println("body  :"+body);
+        System.out.println("headers  :"+headers);
+        System.out.println("plmUrl  :"+plmUrl);
+        JSONObject outJson;
+        try {
+            session.setAttribute("plmurl", plmUrl);
+            JSONObject jsonBody = new JSONObject(body);
+            //Calling service method used to get the login details
+            outJson = plmService.plmLogin(body, plmUrl, headers);
+        } catch(PLMException exe) {
+            exe.printStackTrace();
+            //Prepare Error JSON response with the exception message and code
+            outJson = PLMHelper.prepareErrorResponse(exe);
+            logger.error("ERROR::PLMController: login() -> outJson : " + outJson);
+            return ResponseEntity.status(exe.getStatusCode()).body(outJson.toString());
+        }
+        logger.debug("DEBUG::PLMController: login() outJson) - " + outJson);
+        logger.info("INFO::PLMController: login() end.");
+        return ResponseEntity.ok(outJson.toString());
+    }
 }

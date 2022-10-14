@@ -68,7 +68,6 @@ public class CLOSETController {
     @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> searchStyle(@RequestParam String searchTerm, @RequestParam(defaultValue = "0", required = false) int filter,
                                          @RequestHeader Map<String, String> httpHeaders) {
-        logger.info("INFO::CLOSETController: searchStyle() started.");
         JSONObject outJson;
         try {
             //Calling service method used to get the search details
