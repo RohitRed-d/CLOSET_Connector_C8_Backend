@@ -26,7 +26,7 @@ public class RestService {
     /**
      * make post or get calls
      *
-     * @param url         server url
+     * @param url server url
      * @param methodType  method type
      * @param headers     headers
      * @param requestBody data to be added
@@ -68,6 +68,8 @@ public class RestService {
         RestTemplate restTemplate = new RestTemplate(requestFactory);
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+        System.out.println("entity.getBody()  "+entity.getBody());
+        System.out.println("entity.getHeaders()  "+entity.getHeaders());
         return restTemplate.exchange(url, methodType, entity, String.class);
     }
 

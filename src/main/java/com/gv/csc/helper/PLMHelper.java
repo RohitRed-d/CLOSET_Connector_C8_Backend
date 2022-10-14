@@ -62,4 +62,42 @@ public class PLMHelper {
 
     public PLMHelper() {
     }
+
+	public JSONObject prepareLoginResponse(String body, String plmUrl, Map<String, String> headers)throws PLMException  {
+		JSONObject outJson = new JSONObject();
+		String url = plmUrl + PLMConstants.LOGIN_URI;
+		System.out.println("url  :"+url);
+        HttpHeaders restheaders = new HttpHeaders();
+        restheaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        restheaders.add(HttpHeaders.AUTHORIZATION, "Basic R292aXNlOkNlbnRyaWM4IQ==");
+        
+        System.out.println("restheaders  :"+restheaders);
+        System.out.println("body 2"+body);
+			ResponseEntity<String> responseEntity = restService.doGetOrPostCall(url, HttpMethod.POST, restheaders, body.toString());
+			System.out.println("responseEntity"+responseEntity);
+	        HttpStatus statusCode = responseEntity.getStatusCode();
+	        logger.debug("DEBUG::PLMHelper: prepareLoginResponse() statusCode - "+statusCode);
+	        
+	        if (statusCode.value() != 200) {
+	            String errorJson = responseEntity.getBody();
+	            throw new PLMException(errorJson, statusCode);
+	        }
+	        JSONObject loginResponseJSON = new JSONObject(responseEntity.getBody());
+	        System.out.println("loginResponseJSON  :"+loginResponseJSON);
+	        outJson.put("status", loginResponseJSON);
+		return outJson;
+	}
+	
+	 /**
+     * prepareErrorResponse - Function used to prepare Error JSON
+     * @param exception PLMException exception
+     * @return JSONObject prepares Error JSON consuming exception
+     */
+    public static JSONObject prepareErrorResponse(PLMException exception) {
+        JSONObject errorJSON = new JSONObject();
+        errorJSON.put(CLOSETConnectorConstants.CC_STATUS_CODE_JSON_KEY, exception.getStatusCode());
+        errorJSON.put(CLOSETConnectorConstants.CC_STATUS_JSON_KEY, CLOSETConnectorConstants.CC_FAILED_STATUS_JSON_VALUE);
+        errorJSON.put(CLOSETConnectorConstants.CC_MESSAGE_JSON_KEY, exception.getLocalizedMessage());
+        return errorJSON;
+    }
 }
